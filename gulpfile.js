@@ -14,21 +14,21 @@ var gulp = require('gulp'),
  ];
  var sassSources = ['components/sass/style.css'];
 
-gulp.task('coffee', function(){
+gulp.task('coffee', function() {
 	gulp.src(coffeeSources)
 	.pipe(coffee({ bare: true })
 		.on('error', gutil.log))
 	.pipe(gulp.dest('components/scripts'));
 });
 
-gulp.task('js', function(){
+gulp.task('js', function() {
 	gulp.src(jsSources)
 	.pipe(concat('script.js'))
 	.pipe(browserify())
 	.pipe(gulp.dest('builds/development/js'));
 });
 
-gulp.task('compass', function(){
+gulp.task('compass', function() {
 	gulp.src(sassSources)
 	.pipe(compass({
 		sass: 'components/sass' ,
@@ -39,4 +39,10 @@ gulp.task('compass', function(){
 	.pipe(gulp.dest('builds/development/css'));
 });
 
-gulp.task('default', ['coffee', 'js', 'compass']);
+gulp.task('watch', function() {
+	gulp.watch(coffeeSources, ['coffee']);
+	gulp.watch(jsSources, ['js']);
+	gulp.watch('components/sass/*.scss', ['compass']);
+});
+
+gulp.task('default', ['coffee', 'js', 'compass', 'watch']);
